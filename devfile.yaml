@@ -1,0 +1,64 @@
+schemaVersion: 2.2.2
+metadata:
+  name: module3-dotnet-workspace
+
+components:
+  - name: dotnet
+    container:
+      image: image-registry.openshift-image-registry.svc.cluster.local:5000/openshift/devspaces-dotnet-python:latest
+      memoryRequest: '1Gi'
+      memoryLimit: '2Gi'
+      cpuRequest: '0.5'
+      cpuLimit: '1'
+      mountSources: true
+      endpoints:
+        - exposure: public
+          name: 'ocp-endpoint5020'
+          protocol: https
+          targetPort: 5020
+      env:
+        - name: KAFKA_BOOTSTRAP_SERVERS
+          value: "pk-kafka-kafka-bootstrap.pk-world.svc.cluster.local"
+commands:
+  - exec:
+      commandLine: dotnet clean
+      component: dotnet
+      group:
+        kind: build
+      workingDir: ${PROJECT_SOURCE}/console
+    id: dotnet-clean-console
+  - exec:
+      commandLine: dotnet clean
+      component: dotnet
+      group:
+        kind: build
+      workingDir: ${PROJECT_SOURCE}/ui
+    id: dotnet-clean-ui
+  - exec:
+      commandLine: dotnet build
+      component: dotnet
+      group:
+        kind: build
+      workingDir: ${PROJECT_SOURCE}/console
+    id: dotnet-build-console
+  - exec:
+      commandLine: dotnet build
+      component: dotnet
+      group:
+        kind: build
+      workingDir: ${PROJECT_SOURCE}/ui
+    id: dotnet-build-ui
+  - exec:
+      commandLine: dotnet run
+      component: dotnet
+      group:
+        kind: run
+      workingDir: ${PROJECT_SOURCE}/console
+    id: dotnet-run-console
+  - exec:
+      commandLine: dotnet run
+      component: dotnet
+      group:
+        kind: run
+      workingDir: ${PROJECT_SOURCE}/ui
+    id: dotnet-run-ui
