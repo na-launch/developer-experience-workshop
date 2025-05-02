@@ -1,0 +1,64 @@
+metadata:
+ description: Devfile to assist with RH Serverless
+ displayName: RH Serverless
+ name: module4-python-workspace
+schemaVersion: 2.2.2
+
+components:
+- container:
+   args:
+   - tail
+   - -f
+   - /dev/null
+   endpoints:
+   - name: https-py-5000
+     protocol: https
+     targetPort: 5000
+   - name: https-py-5001
+     protocol: https
+     targetPort: 5001
+   - exposure: none
+     name: debug
+     targetPort: 5858
+   env:   
+   - name: DEBUG_PORT
+     value: "5858"
+   - name: countryCode
+     value: "en"
+   image: image-registry.openshift-image-registry.svc.cluster.local:5000/openshift/devspaces-dotnet-python:latest
+   mountSources: true
+  name: py
+
+commands:
+- exec:
+   commandLine: pip install -r requirements.txt
+   component: py
+   group:
+     isDefault: true
+     kind: build
+   workingDir: ${PROJECT_SOURCE}/hello-world-v1
+  id: pip-install-requirements-hello-world-v1
+- exec:
+   commandLine: flask run --host=0.0.0.0 --port=5000
+   component: py
+   group:
+     isDefault: true
+     kind: run
+   workingDir: ${PROJECT_SOURCE}/hello-world-v1
+  id: run-python-hello-world-v1
+- exec:
+   commandLine: pip install -r requirements.txt
+   component: py
+   group:
+     isDefault: true
+     kind: build
+   workingDir: ${PROJECT_SOURCE}/hello-world-v2
+  id: pip-install-requirements-hello-world-v2
+- exec:
+   commandLine: flask run --host=0.0.0.0 --port=5001
+   component: py
+   group:
+     isDefault: true
+     kind: run
+   workingDir: ${PROJECT_SOURCE}/hello-world-v2
+  id: run-python-hello-world-v2
