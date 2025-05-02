@@ -1,0 +1,45 @@
+metadata:
+ description: module2
+ displayName: devfile
+ name: module2-python-workspace
+schemaVersion: 2.2.2
+
+components:
+- container:
+   args:
+   - tail
+   - -f
+   - /dev/null
+   endpoints:
+   - name: https-python
+     protocol: https
+     targetPort: 5000
+   - exposure: none
+     name: debug
+     targetPort: 5858
+   env:
+   - name: ADMIN
+     value: "http://opensesame.shared-config.svc.cluster.local:3000/opensesame"   
+   - name: DEBUG_PORT
+     value: "5858"
+   image: image-registry.openshift-image-registry.svc.cluster.local:5000/openshift/devspaces-dotnet-python:latest
+   mountSources: true
+  name: py
+
+commands:
+- exec:
+   commandLine: pip install -r requirements.txt
+   component: py
+   group:
+     isDefault: true
+     kind: build
+   workingDir: ${PROJECT_SOURCE}
+  id: pip-install-requirements
+- exec:
+   commandLine: flask run --host=0.0.0.0 --port=5000
+   component: py
+   group:
+     isDefault: true
+     kind: run
+   workingDir: ${PROJECT_SOURCE}
+  id: run-python
