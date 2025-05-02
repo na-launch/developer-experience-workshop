@@ -1,0 +1,4 @@
+@ds_challenge02_HostAddress = http://localhost:5164
+GET {{ds_challenge02_HostAddress}}/api/getcurrentdate
+Accept: application/json
+###

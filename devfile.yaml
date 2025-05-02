@@ -1,0 +1,24 @@
+metadata:
+ description: module2
+ displayName: devfile
+ name: module2-dotnet-workspace
+schemaVersion: 2.2.2
+
+components:
+- container:
+   args:
+   - tail
+   - -f
+   - /dev/null
+   endpoints:
+   - name: https-dotnet
+     protocol: https
+     targetPort: 5000
+   env:
+   - name: ADMIN
+     value: "http://opensesame.shared-config.svc.cluster.local:3000/opensesame"
+   - name: ASPNETCORE_URLS
+     value: http://0.0.0.0:5000
+   image: image-registry.openshift-image-registry.svc.cluster.local:5000/openshift/devspaces-dotnet-python:latest
+   mountSources: true
+  name: dotnet
