@@ -1,0 +1,56 @@
+metadata:
+ description: Devfile to assist with serverless project
+ displayName: RH Serverless
+ name: module4-dotnet-workspace
+schemaVersion: 2.2.2
+
+components:
+- container:
+   args:
+   - tail
+   - -f
+   - /dev/null
+   endpoints:
+   - name: https-net-5000
+     protocol: https
+     targetPort: 5000
+   - name: https-net-5001
+     protocol: https
+     targetPort: 5001
+   env:   
+   - name: countryCode
+     value: "fr"  
+   image: image-registry.openshift-image-registry.svc.cluster.local:5000/openshift/devspaces-dotnet-python:latest
+   mountSources: true
+  name: dotnet
+
+commands:
+  - exec:
+      commandLine: dotnet restore
+      component: dotnet
+      group:
+        kind: build
+      workingDir: ${PROJECT_SOURCE}/hello-world-v1
+    id: dotnet-build-hello-world-v1
+
+  - exec:
+      commandLine: dotnet run --urls "http://0.0.0.0:5000"
+      component: dotnet
+      group:
+        kind: run
+      workingDir: ${PROJECT_SOURCE}/hello-world-v1
+    id: run-dotnet-hello-world-v1
+  - exec:
+      commandLine: dotnet restore
+      component: dotnet
+      group:
+        kind: build
+      workingDir: ${PROJECT_SOURCE}/hello-world-v2
+    id: dotnet-build-hello-world-v2
+  - exec:
+      commandLine: dotnet run --urls "http://0.0.0.0:5001"
+      component: dotnet
+      group:
+        kind: run
+      workingDir: ${PROJECT_SOURCE}/hello-world-v2
+    id: run-dotnet-hello-world-v2
