@@ -1,0 +1,23 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: module5-curl
+spec:
+  # Runs every minute (adjust to "*/1 * * * *")
+  schedule: "*/1 * * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: module5-curl-random
+            env:
+              - name: ENDPOINT
+                ### REPLACE THIS VALUE WITH YOUR UNIQUE SERVICE NAME i.e. ocp-workshop-<your username> ###
+                value: <REPLACEME>:5000
+            image: default-route-openshift-image-registry.apps.<ocp-cluster>/ocp-config/module5-curl:latest
+            # Optional: if your script requires no parameters,
+            # you can rely on the CMD set in the image.
+            # Otherwise, you can override with:
+            # command: ["/bin/bash", "/opt/curl-cron.sh"]
+          restartPolicy: OnFailure

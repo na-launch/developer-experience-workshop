@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Flask App</title>
+  <!-- Link to the stylesheet stored in the static folder -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+  <header>
+    <h1>Welcome to My Flask App</h1>
+  </header>
+  <main>
+    <p>This is your index page rendered with Flask's templating engine.</p>
+  </main>
+  <footer>
+    <p>&copy; 2025 My Flask App</p>
+  </footer>
+</body>
+</html>
