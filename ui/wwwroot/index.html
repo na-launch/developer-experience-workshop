@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Kafka Real-Time Consumer</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Reference to CSS in wwwroot -->
+    <link rel="stylesheet" href="/styles.css" />
+    <!-- SignalR from CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/7.0.5/signalr.min.js"></script>
+  </head>
+  <body>
+    <header>
+      <img src="/logo.png" alt="Red Hat Logo" />
+      <h1>Kafka Real-Time Consumer</h1>
+    </header>
+
+    <!-- Topic dropdown container styled as in your sample -->
+    <div class="topic-change">
+      <label for="topicSelect">Choose Kafka topic:</label>
+      <!-- Wrapper for select to anchor the custom arrow -->
+      <div class="select-wrapper">
+        <select id="topicSelect"></select>
+      </div>
+    </div>
+
+    <main>
+      <label id="currentTopicLabel">
+        <strong>Current topic:</strong> <span id="currentTopic">Not set</span>
+      </label>
+      <div class="content">
+        <p class="subtitle">
+          Messages from Kafka will appear below in real time:
+        </p>
+        <ul id="messages"></ul>
+      </div>
+    </main>
+
+    <footer>
+      &copy; 2025 Red Hat Launch Team
+    </footer>
+
+    <script>
+      // Establish SignalR connection to the hub.
+      const connection = new signalR.HubConnectionBuilder()
+        .withUrl("/kafkaHub")
+        .build();
+
+      connection.start()
+        .then(() => console.log("SignalR connection established."))
+        .catch(err => console.error("SignalR Connection Error:", err));
+
+      // Listen for incoming messages.
+      connection.on("ReceiveMessage", function(message) {
+        console.log("Message received:", message);
+        const li = document.createElement("li");
+        li.textContent = message;
+        document.getElementById("messages").appendChild(li);
+        // Optionally, auto-scroll to the bottom:
+        document.getElementById("messages").scrollTop = document.getElementById("messages").scrollHeight;
+      });
+
+      // Function to fetch and populate topics in the dropdown.
+      async function populateTopics() {
+        try {
+          const response = await fetch("/topics");
+          if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+          }
+          const data = await response.json();
+          const topicSelect = document.getElementById("topicSelect");
+          topicSelect.innerHTML = "";  // Clear any existing options
+          
+          data.topics.forEach(topic => {
+            const option = document.createElement("option");
+            option.value = topic;
+            option.textContent = topic;
+            topicSelect.appendChild(option);
+          });
+          
+          // Set the current topic label to the first topic.
+          if (data.topics.length > 0) {
+            document.getElementById("currentTopic").textContent = data.topics[0];
+          }
+        } catch (error) {
+          console.error("Failed to fetch topics:", error);
+        }
+      }
+
+      // Populate topics on page load.
+      populateTopics();
+
+      // Listen for changes in the dropdown.
+      document.getElementById("topicSelect").addEventListener("change", async (event) => {
+        const newTopic = event.target.value;
+        try {
+          const response = await fetch("/change_topic", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ topic: newTopic })
+          });
+          if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+          }
+          const result = await response.json();
+          console.log(result.message);
+          // Update the current topic display.
+          document.getElementById("currentTopic").textContent = newTopic;
+          // Clear the messages list so that the new topic messages appear separately.
+          document.getElementById("messages").innerHTML = "";
+        } catch (error) {
+          console.error("Error changing topic:", error);
+          alert("Failed to change topic.");
+        }
+      });
+    </script>
+  </body>
+</html>
