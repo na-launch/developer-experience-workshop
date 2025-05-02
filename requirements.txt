@@ -1,0 +1,7 @@
+confluent_kafka
+aiokafka
+aioconsole
+fastapi
+uvicorn
+websockets
+colorlog

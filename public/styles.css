@@ -1,0 +1,170 @@
+/* public/styles.css */
+
+/* Import Red Hat Display from Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Red+Hat+Display:wght@400;500;700&display=swap');
+
+/* BASIC RESET */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* MAIN LAYOUT & THEME */
+body {
+    font-family: 'Red Hat Display', sans-serif;
+    background: linear-gradient(135deg, #d10000 0%, #ff3b3b 100%);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* HEADER */
+header {
+    position: relative;
+    text-align: center;
+    padding: 2rem 0;
+    background: #151515;
+    font-family: 'Red Hat Display', sans-serif;
+}
+
+header img {
+    position: absolute;
+    left: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    height: 56px;
+    width: auto;
+    margin-right: 1rem;
+}
+
+header h1 {
+    font-size: 1.75rem;
+    color: #fff;
+    display: inline-block;
+}
+
+/* MAIN CONTENT CARD */
+main {
+    width: 100%;
+    max-width: 720px;
+    margin: 2rem auto;
+    background-color: #fffafa; /* Slight pinkish tint */
+    border-radius: 8px;
+    box-shadow: 0 6px 12px rgba(0,0,0,0.25);
+    overflow: hidden;
+}
+
+.content {
+    padding: 2rem;
+    padding-top: 1rem;
+}
+
+.subtitle {
+    margin-bottom: 1.5rem;
+    font-size: 1.25rem;
+    color: #555;
+}
+
+/* MESSAGE LIST */
+#messages {
+    list-style: none;
+}
+
+#messages li {
+    background-color: #ffe5e5;
+    margin-bottom: 0.75rem;
+    padding: 0.75rem 1rem;
+    border-radius: 6px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.12);
+    transition: transform 0.1s ease-in-out, box-shadow 0.1s ease-in-out;
+    word-break: break-word;
+}
+
+#messages li:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+/* FOOTER */
+footer {
+    text-align: center;
+    color: #fff;
+    margin-top: auto;
+    padding: 1rem 0;
+    background: #090513;
+    font-size: 0.9rem;
+}
+
+/* Enhanced styling for the topic change container (dropdown version) */
+.topic-change {
+    max-width: 100%;
+    margin: 1rem auto;
+    padding: 0 1rem;
+
+    white-space: nowrap;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.topic-change label {
+    white-space: nowrap;
+    font-size: 1rem;
+    margin-right: 0.5rem;
+}
+
+/* Wrapper to position the custom arrow on the select */
+.select-wrapper {
+    position: relative;
+    display: inline-block;
+}
+
+/* Select box styling */
+.select-wrapper select {
+    position: relative;
+    z-index: 1;
+    padding: 0.6em 1em;
+    padding-right: 2em;  /* Extra space for the arrow */
+    font-size: 1rem;
+    color: #333;
+    background: rgba(255, 255, 255, 0.95);
+    border: 2px solid #ff3b3b;
+    border-radius: 8px;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    outline: none;
+    transition: all 0.2s ease-in-out;
+}
+
+.select-wrapper select:hover,
+.select-wrapper select:focus {
+    border-color: #d10000;
+    box-shadow: 0 0 8px rgba(209, 0, 0, 0.5);
+}
+
+/* Custom arrow indicator placed inside the select wrapper */
+.select-wrapper::after {
+    content: "";
+    position: absolute;
+    z-index: 2;
+    top: 50%;
+    right: 0.85em;
+    transform: translateY(-50%);
+    width: 0;
+    height: 0;
+    pointer-events: none;
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-top: 6px solid #333;
+}
+
+/* Current Topic Label styling */
+#currentTopicLabel {
+    display: block;
+    font-size: 1.1em;
+    color: #333;
+    padding: 1rem;
+}
