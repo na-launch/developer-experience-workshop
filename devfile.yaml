@@ -1,0 +1,51 @@
+metadata:
+ description: Workspace devfile builder
+ displayName: module3
+ name: module3-devspace
+ projectType: Python
+ language: Python
+schemaVersion: 2.2.2
+
+components:
+- container:
+   image: registry.access.redhat.com/ubi9/python-39:1-1739420387
+   mountSources: true
+   memoryRequest: '1Gi'
+   memoryLimit: '2Gi'
+   cpuRequest: '0.5'
+   cpuLimit: '1'
+   args:
+   - tail
+   - -f
+   - /dev/null
+   endpoints:
+   - name: https-python
+     protocol: https
+     targetPort: 5001
+   - exposure: none
+     name: debug
+     targetPort: 5858
+   env:   
+   - name: DEBUG_PORT
+     value: "5858"
+   - name: KAFKA_BOOTSTRAP_SERVERS
+     value: "pk-kafka-kafka-bootstrap.pk-world.svc.cluster.local"
+  name: py
+
+commands:
+- exec:
+   commandLine: pip install -r requirements.txt
+   component: py
+   group:
+     isDefault: true
+     kind: build
+   workingDir: ${PROJECT_SOURCE}
+  id: pip-install-requirements
+- exec:
+   commandLine: uvicorn main:app --host 0.0.0.0 --port 5001 --reload
+   component: py
+   group:
+     isDefault: true
+     kind: run
+   workingDir: ${PROJECT_SOURCE}
+  id: run-python
