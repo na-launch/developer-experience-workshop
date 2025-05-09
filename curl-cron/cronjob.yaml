@@ -15,7 +15,8 @@ spec:
               - name: ENDPOINT
                 ### REPLACE THIS VALUE WITH YOUR UNIQUE SERVICE NAME i.e. ocp-workshop-<your username> ###
                 value: <REPLACEME>:5000
-            image: default-route-openshift-image-registry.apps.<ocp-cluster>/ocp-config/module5-curl:latest
+            ### REPLACE THIS VALUE WITH YOUR CLUSTER DOMAIN NAME ###
+            image: default-route-openshift-image-registry.apps.<REPLACEME>/openshift/module5-curl:latest
             # Optional: if your script requires no parameters,
             # you can rely on the CMD set in the image.
             # Otherwise, you can override with:
