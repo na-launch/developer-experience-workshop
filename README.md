@@ -1,4 +1,4 @@
-# OpenShift Enablement Workshop Modules
+# Developer Experience Workshop Modules
 
 * Module 1: Introduction to Developer Hub
 * Module 2: Using Red Hat Dev Spaces
